@@ -23,7 +23,12 @@ along with uCLbench.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "CL/cl.h"
+#if defined(__APPLE__) || defined(__MACOSX)
+#include <OpenCL/cl.hpp>
+#else
+#include <CL/cl.hpp>
+#endif
+
 
 typedef struct _platform_info {
 	cl_platform_id id;

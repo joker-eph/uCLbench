@@ -1,15 +1,22 @@
-cmake_minimum_required (VERSION 2.6)
+  cmake_minimum_required (VERSION 2.6)
 project (uclbench C CXX)
+
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
 
 # set OpenCL paths
 set(CLLIB_HEADER ../cllib/)
-set(EXTERNAL_LIBS OpenCL)
+# Require OpenCL detection
+FIND_PACKAGE(OpenCL REQUIRED)
+INCLUDE_DIRECTORIES(${OPENCL_INCLUDE_DIRS})
+add_definitions(-D__CL_ENABLE_EXCEPTIONS)
+IF(OPENCL_HAS_CPP_BINDINGS)
+    message(STATUS "OpenCL has CPP bindings. Full include is: " ${OPENCL_INCLUDE_DIRS})
+ELSE(OPENCL_HAS_CPP_BINDINGS)
+    message(WARNING "No OpenCL CPP bindings found ")
+ENDIF(OPENCL_HAS_CPP_BINDINGS)
 
-include_directories($ENV{OPENCL_INCLUDE})
-message("INCLUDE = " $ENV{OPENCL_INCLUDE})
 
-link_directories($ENV{OPENCL_LIBRARY})
-message("LIBRARY = " $ENV{OPENCL_LIBRARY})
+message("INCLUDE = " ${OPENCL_INCLUDE_DIRS})
 
 # set platform-specific defines
 if(MSVC)
